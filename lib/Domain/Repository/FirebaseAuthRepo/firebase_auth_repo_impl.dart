@@ -1,12 +1,13 @@
 import 'dart:developer';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:firebase_auth/firebase_auth.dart';
-import 'package:get_it/get_it.dart';
 import 'package:fcm_flutter/Core/Constants/database_constants.dart';
 import 'package:fcm_flutter/Domain/Repository/LocalAuthRepo/local_auth_repo.dart';
 import 'package:fcm_flutter/Models/ErrorResponse/error_response.dart';
 import 'package:fcm_flutter/Models/UserModel/user_model.dart';
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_messaging/firebase_messaging.dart';
+import 'package:get_it/get_it.dart';
 
 import 'firebase_auth_repo.dart';
 
@@ -14,6 +15,7 @@ class FirebaseAuthRepositoryImpl implements FirebaseAuthRepository {
   final _firebaseAuth = GetIt.I<FirebaseAuth>();
   final _firestore = GetIt.I<FirebaseFirestore>();
   final _localAuth = GetIt.I<LocalAuthRepository>();
+  final _firebaseMessaging = GetIt.I<FirebaseMessaging>();
 
   @override
   Future<(bool, ErrorResponse?)> signUpUser({
@@ -131,6 +133,40 @@ class FirebaseAuthRepositoryImpl implements FirebaseAuthRepository {
     } catch (e) {
       log(e.toString());
       return null;
+    }
+  }
+
+  @override
+  Future<void> requestFcmPermission() async {
+    try {
+      _firebaseMessaging.requestPermission(
+        alert: true,
+        announcement: true,
+        badge: true,
+        carPlay: false,
+        criticalAlert: false,
+        provisional: false,
+        sound: true,
+      );
+    } catch (e) {
+      log(e.toString());
+      return;
+    }
+  }
+
+  @override
+  Future<void> updateFcmDetails() async {
+    try {
+      final uid = _firebaseAuth.currentUser?.uid;
+      final token = await _firebaseMessaging.getToken();
+      if (token != null && uid != null) {
+        _firestore.collection(DataBaseConstants.users).doc(uid).update({
+          DataBaseConstants.fcmToken: token,
+        });
+      }
+    } catch (e) {
+      log(e.toString());
+      return;
     }
   }
 }

@@ -17,5 +17,12 @@ abstract class FirebaseAuthRepository {
     required String password,
   });
 
+  //get user profile details
   Future<UserModel?> getUserProfile();
+
+  ///request for fcm permission
+  Future<void> requestFcmPermission();
+
+  ///update fcm in user Docs
+  Future<void> updateFcmDetails();
 }

@@ -8,6 +8,7 @@ class UserModel with _$UserModel {
   const factory UserModel({
     String? name,
     String? email,
+    String? fcmToken,
   }) = _UserModel;
 
   factory UserModel.fromJson(Map<String, dynamic> json) =>

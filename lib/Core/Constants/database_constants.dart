@@ -4,6 +4,7 @@ class DataBaseConstants {
   static const String email = 'email';
   static const String createdAt = 'createdAt';
   static const String users = 'users';
+  static const String fcmToken = 'fcmToken';
 
   ///firebase response constants
   static const String weekPassword = 'weak-password';

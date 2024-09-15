@@ -1,7 +1,7 @@
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
-import 'package:get_it/get_it.dart';
 import 'package:fcm_flutter/Models/UserModel/user_model.dart';
+import 'package:get_it/get_it.dart';
 
 import '../../Domain/Repository/FirebaseAuthRepo/firebase_auth_repo.dart';
 
@@ -19,6 +19,7 @@ class UserProfileBloc extends Bloc<UserProfileEvent, UserProfileState> {
     emit(UserProfileLoadingState());
 
     try {
+      await _auth.updateFcmDetails();
       final res = await _auth.getUserProfile();
       if (res != null) {
         emit(UserProfileLoadedState(userModel: res));

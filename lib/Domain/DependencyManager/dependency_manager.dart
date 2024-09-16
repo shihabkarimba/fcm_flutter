@@ -1,4 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:fcm_flutter/Domain/Repository/FirebaseMessaging/firebase_messaging_repo.dart';
+import 'package:fcm_flutter/Domain/Repository/FirebaseMessaging/firebase_messaging_repo_impl.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:get_it/get_it.dart';
@@ -31,4 +33,6 @@ getRepositories() async {
       () => LocalAuthRepositoryImpl());
   GetIt.I.registerLazySingleton<FirebaseAuthRepository>(
       () => FirebaseAuthRepositoryImpl());
+  GetIt.I.registerLazySingleton<FirebaseMessagingRepo>(
+      () => FirebaseMessagingRepoImpl());
 }

@@ -10,11 +10,11 @@ import '../../Presentation/Features/Splash/Page/splash_page.dart';
 
 part 'route_data.dart';
 
-final _navigatorKey = GlobalKey<NavigatorState>();
+final navigatorKey = GlobalKey<NavigatorState>();
 
 final router = GoRouter(
   initialLocation: Routes.splash.path,
-  navigatorKey: _navigatorKey,
+  navigatorKey: navigatorKey,
   redirect: (ctx, state) {
     ///TODO(SHIHAB) ADD REDIRECT WHEN IT IS NEEDED (eg: deep linking)
     return null;

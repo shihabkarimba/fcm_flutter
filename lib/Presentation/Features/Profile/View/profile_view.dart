@@ -1,6 +1,7 @@
 import 'package:fcm_flutter/Domain/Repository/LocalAuthRepo/local_auth_repo.dart';
 import 'package:fcm_flutter/Presentation/Shared/Widgets/show_dialog.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:get_it/get_it.dart';
 
@@ -30,22 +31,32 @@ class _ProfileViewState extends State<ProfileView> {
           child: Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              BlocBuilder<UserProfileBloc, UserProfileState>(
-                builder: (context, state) {
-                  return switch (state) {
-                    UserProfileLoadedState(userModel: final userData) => Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Text('${userData.name}'),
-                          Text('${userData.email}'),
-                        ],
-                      ),
-                    UserProfileInitialState() ||
-                    UserProfileLoadingState() ||
-                    UserProfileErrorState() =>
-                      const Expanded(child: SizedBox.shrink())
-                  };
-                },
+              Expanded(
+                child: BlocBuilder<UserProfileBloc, UserProfileState>(
+                  builder: (context, state) {
+                    return switch (state) {
+                      UserProfileLoadedState(userModel: final userData) =>
+                        Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Text('${userData.name}'),
+                            Text('${userData.email}'),
+                            ElevatedButton(
+                              onPressed: () async {
+                                await Clipboard.setData(ClipboardData(
+                                    text: '${userData.fcmToken}'));
+                              },
+                              child: const Text('Copy Token'),
+                            ),
+                          ],
+                        ),
+                      UserProfileInitialState() ||
+                      UserProfileLoadingState() ||
+                      UserProfileErrorState() =>
+                        const Expanded(child: SizedBox.shrink())
+                    };
+                  },
+                ),
               ),
               IconButton(
                 onPressed: () {

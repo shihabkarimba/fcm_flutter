@@ -19,7 +19,6 @@ class UserProfileBloc extends Bloc<UserProfileEvent, UserProfileState> {
     emit(UserProfileLoadingState());
 
     try {
-      await _auth.updateFcmDetails();
       final res = await _auth.getUserProfile();
       if (res != null) {
         emit(UserProfileLoadedState(userModel: res));
